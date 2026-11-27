@@ -84,6 +84,12 @@ function renderList() {
     shown: shown.length,
     total: TOTAL,
     note: filterNote(state),
+    stats: {
+      total: TOTAL,
+      newLows: deals.filter((d) => d.verdict === 'NEW LOW').length,
+      stores: new Set(deals.map((d) => d.store)).size,
+      checkedShort: '15:00 UTC',
+    },
   });
   wireList(state);
 }

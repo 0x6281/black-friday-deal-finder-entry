@@ -28,6 +28,7 @@ function dealCard(d) {
   <p class="card-meta">${storeChip(d.store)} <span class="category">${escape(d.category)}</span></p>
   <p class="card-price"><strong>${usd(d.price)}</strong> <s>${usd(d.was)}</s></p>
   <p class="card-save">You save ${usd(saving(d))}</p>
+  <p class="card-note">${escape(d.note)}</p>
   <p class="card-check">Checked ${checkTime(d.checked)} &middot; Source: ${escape(d.source)}</p>
   <p class="card-link"><a class="btn" href="${escape(d.url)}" target="_blank" rel="noopener">View at ${escape(d.store)} &nearr;</a></p>
 </article>`;
@@ -79,9 +80,16 @@ export function listPage(shown, state, counts) {
   const cards = shown.length === 0
     ? '<p class="empty">No deal matches those filters. <button type="button" id="clear-empty" class="btn btn-ghost">Clear all filters</button></p>'
     : `<div class="grid">${shown.map(dealCard).join('')}</div>`;
+  const s = counts.stats;
   return `<section class="intro">
   <h1>Black Friday 2026 deals, checked today</h1>
-  <p class="lede">Every price below was read from the named deals source on Friday 27 November 2026. No inflated "was" prices, no guesswork: each card shows the sale price, the usual price, the discount and the verdict.</p>
+  <p class="lede">Every price below was read from the named deals source on Friday 27 November 2026, at 15:00 UTC. No inflated "was" prices, no guesswork: each card shows the sale price, the usual price, the discount, the verdict — and the evidence behind it. Every store link goes to the product page at that store.</p>
+  <div class="stats">
+    <div class="stat"><span class="stat-num">${s.total}</span><span class="stat-label">verified deals</span></div>
+    <div class="stat"><span class="stat-num">${s.newLows}</span><span class="stat-label">new lows</span></div>
+    <div class="stat"><span class="stat-num">${s.stores}</span><span class="stat-label">stores</span></div>
+    <div class="stat"><span class="stat-num">${escape(s.checkedShort)}</span><span class="stat-label">prices checked 27 Nov</span></div>
+  </div>
 </section>
 <details class="filters-wrap">
   <summary>Search &amp; filters</summary>
@@ -91,18 +99,18 @@ export function listPage(shown, state, counts) {
 ${cards}
 <section class="verify" id="how-we-verify">
   <h2>How we verify</h2>
-  <p>Every deal on this page was read from a named deals source on 27 November 2026 (Black Friday itself), at 08:00 UTC. The source is printed on each card and on each deal page. Prices are in US dollars and the discount is computed from the sale price against the usual price.</p>
+  <p>Every deal on this page was read from a named deals source on 27 November 2026 (Black Friday itself), at 15:00 UTC. The source is printed on each card and on each deal page, along with the evidence for its verdict. Prices are in US dollars and the discount is computed from the sale price against the usual price — the store's own list price, never the manufacturer's suggested price.</p>
   <dl class="verdicts">
     <dt><span class="verdict verdict-new-low">NEW LOW</span></dt>
     <dd>The lowest price ever, or the lowest in 90 days, according to a price tracker or the source that reported it.</dd>
     <dt><span class="verdict verdict-strong">STRONG</span></dt>
     <dd>A big cut: 40%+ off, or $100 or more off a current product.</dd>
     <dt><span class="verdict verdict-good">GOOD</span></dt>
-    <dd>A solid cut of 20&ndash;40%, worth buying if you want the item.</dd>
+    <dd>A solid cut of 20&ndash;40%, or a first-ever discount on a product that rarely or never goes on sale.</dd>
     <dt><span class="verdict verdict-modest">MODEST</span></dt>
     <dd>A small cut. Only worth it if you already wanted the item.</dd>
   </dl>
-  <p>Store links go to that store&rsquo;s search page for the exact product name. Direct product URLs rotate during the sale; the search page shows the same product at the store, and the price we read at check time is the one on the card.</p>
+  <p>Every store link goes to the product page at that store — Amazon, Best Buy, Target or Walmart — so you can see the exact product and its price. The price we read at check time is the one on the card.</p>
 </section>`;
 }
 
@@ -126,17 +134,18 @@ export function dealPage(d, related) {
     <dt>Sale price</dt><dd>${usd(d.price)}</dd>
     <dt>Usual price</dt><dd>${usd(d.was)}</dd>
     <dt>Discount</dt><dd>${pct}% off &mdash; save ${usd(saving(d))}</dd>
-    <dt>Verdict</dt><dd>${escape(d.verdict)}: ${d.verdict === 'NEW LOW' ? 'the lowest price ever, or the lowest in 90 days, per a tracker or the source.' : d.verdict === 'STRONG' ? 'a large, genuine cut on a current product.' : d.verdict === 'GOOD' ? 'a solid 20–40% cut, worth buying.' : 'a small cut; only worth it if you already wanted the item.'}</dd>
+    <dt>Verdict</dt><dd>${escape(d.verdict)}: ${d.verdict === 'NEW LOW' ? 'the lowest price ever, or the lowest in 90 days, per a tracker or the source.' : d.verdict === 'STRONG' ? 'a large, genuine cut on a current product.' : d.verdict === 'GOOD' ? 'a solid cut, or a first-ever discount on a product that rarely goes on sale.' : 'a small cut; only worth it if you already wanted the item.'}</dd>
+    <dt>Evidence</dt><dd>${escape(d.note)}</dd>
     <dt>Checked</dt><dd>${checkTime(d.checked)}</dd>
     <dt>Source</dt><dd>${escape(d.source)}</dd>
   </dl>
   <p><a class="btn btn-big" href="${escape(d.url)}" target="_blank" rel="noopener">View at ${escape(d.store)} &nearr;</a></p>
-  <p class="detail-note">The link opens the store&rsquo;s search page for this exact product. Direct product URLs rotate during the sale; the search page shows the same product at the store.</p>
+  <p class="detail-note">The link opens the product page at that store, so you can check the exact product and its price.</p>
 </article>
 ${rel}`;
 }
 
 export function missingPage() {
   return `<h1>Deal not found</h1>
-<p>There is no deal at this address. <a href="#/">See all 35 verified deals</a>.</p>`;
+<p>There is no deal at this address. <a href="#/">See all 43 verified deals</a>.</p>`;
 }

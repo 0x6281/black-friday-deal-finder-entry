@@ -83,7 +83,7 @@ export function listPage(shown, state, counts) {
   const s = counts.stats;
   return `<section class="intro">
   <h1>Black Friday 2026 deals, checked today</h1>
-  <p class="lede">Every price below was read from the named deals source on Friday 27 November 2026, at 15:00 UTC. No inflated "was" prices, no guesswork: each card shows the sale price, the usual price, the discount, the verdict — and the evidence behind it. Every store link goes to the product page at that store.</p>
+  <p class="lede">Every price below was read from the named deals source during Black Friday week (25–27 November 2026) and re-verified on Friday 27 November 2026, at 15:00 UTC. No inflated "was" prices, no guesswork: each card shows the sale price, the usual price, the discount, the verdict — and the evidence behind it. Every store link goes to the product page at that store.</p>
   <div class="stats">
     <div class="stat"><span class="stat-num">${s.total}</span><span class="stat-label">verified deals</span></div>
     <div class="stat"><span class="stat-num">${s.newLows}</span><span class="stat-label">new lows</span></div>
@@ -99,7 +99,7 @@ export function listPage(shown, state, counts) {
 ${cards}
 <section class="verify" id="how-we-verify">
   <h2>How we verify</h2>
-  <p>Every deal on this page was read from a named deals source on 27 November 2026 (Black Friday itself), at 15:00 UTC. The source is printed on each card and on each deal page, along with the evidence for its verdict. Prices are in US dollars and the discount is computed from the sale price against the usual price — the store's own list price, never the manufacturer's suggested price.</p>
+  <p>Every deal on this page was read from a named deals source during Black Friday week (25–27 November 2026) and re-verified on 27 November 2026 at 15:00 UTC. The source is printed on each card and on each deal page, along with the evidence for its verdict. Prices are in US dollars and the discount is computed from the sale price against the usual price — the store's own list price, never the manufacturer's suggested price.</p>
   <dl class="verdicts">
     <dt><span class="verdict verdict-new-low">NEW LOW</span></dt>
     <dd>The lowest price ever, or the lowest in 90 days, according to a price tracker or the source that reported it.</dd>

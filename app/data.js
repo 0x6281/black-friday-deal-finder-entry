@@ -257,7 +257,7 @@ export const deals = [
     url: "https://www.target.com/s?searchTerm=Amazon%20Kindle%20Paperwhite%2016GB",
     checked: "2026-11-27T08:00:00Z",
     source: "TradingView/Benzinga + comicbook",
-    verdict: "STRONG",
+    verdict: "GOOD",
   },
   {
     id: "donkey-kong-bananza",
@@ -420,11 +420,11 @@ export const deals = [
     title: "Apple AirTag 2 (1-pack)",
     store: "Amazon",
     category: "Smart Home & Wearables",
-    price: 23,
+    price: 18,
     was: 29,
     url: "https://www.amazon.com/s?k=Apple%20AirTag%202%20%281-pack%29",
     checked: "2026-11-27T08:00:00Z",
-    source: "9to5Toys",
+    source: "9to5Mac",
     verdict: "NEW LOW",
   },
 ];

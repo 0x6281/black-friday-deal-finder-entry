@@ -97,6 +97,11 @@ function wireList(state) {
   const clear = document.getElementById('clear-filters');
   const clearEmpty = document.getElementById('clear-empty');
 
+  // Keep the filter panel collapsed on phones so the first deal is visible
+  // above the fold; open it by default on wider screens.
+  const filtersWrap = document.querySelector('.filters-wrap');
+  if (filtersWrap) filtersWrap.open = window.matchMedia('(min-width: 641px)').matches;
+
   // The grid and the count update live; the filter controls are never re-rendered
   // while the shopper types, so focus stays where it is.
   const refreshGrid = () => {
@@ -122,7 +127,15 @@ function wireList(state) {
     state.store = '';
     state.discount = '';
     state.sort = 'discount';
-    renderList();
+    // Clear the DOM controls too, then re-render the grid from the blank
+    // state. (Calling renderList() here would re-derive the state from the
+    // stale URL hash and un-clear everything.)
+    if (search) search.value = '';
+    if (category) category.value = '';
+    if (store) store.value = '';
+    if (discount) discount.value = '';
+    if (sort) sort.value = 'discount';
+    refreshGrid();
     document.getElementById('q')?.focus();
   };
 
@@ -173,7 +186,16 @@ function render() {
     document.title = 'Deal Beacon — Black Friday 27 November 2026';
     renderList();
   }
-  window.scrollTo(0, 0);
+  // An in-page anchor (e.g. #how-we-verify from the footer) should land on
+  // its section, not the top of the page.
+  const anchorId = location.hash.startsWith('#') && !location.hash.startsWith('#/')
+    ? location.hash.slice(1)
+    : '';
+  if (anchorId) {
+    document.getElementById(anchorId)?.scrollIntoView();
+  } else {
+    window.scrollTo(0, 0);
+  }
   window.__shotReady = true;
 }
 

@@ -83,7 +83,7 @@ export function listPage(shown, state, counts) {
   <h1>Black Friday 2026 deals, checked today</h1>
   <p class="lede">Every price below was read from the named deals source on Friday 27 November 2026. No inflated "was" prices, no guesswork: each card shows the sale price, the usual price, the discount and the verdict.</p>
 </section>
-<details class="filters-wrap" open>
+<details class="filters-wrap">
   <summary>Search &amp; filters</summary>
   ${filterBar(state)}
 </details>
@@ -96,13 +96,13 @@ ${cards}
     <dt><span class="verdict verdict-new-low">NEW LOW</span></dt>
     <dd>The lowest price ever, or the lowest in 90 days, according to a price tracker or the source that reported it.</dd>
     <dt><span class="verdict verdict-strong">STRONG</span></dt>
-    <dd>A large, genuine cut &mdash; 40% or more, or a big dollar saving &mdash; on a current product.</dd>
+    <dd>A big cut: 40%+ off, or $100 or more off a current product.</dd>
     <dt><span class="verdict verdict-good">GOOD</span></dt>
     <dd>A solid cut of 20&ndash;40%, worth buying if you want the item.</dd>
     <dt><span class="verdict verdict-modest">MODEST</span></dt>
     <dd>A small cut. Only worth it if you already wanted the item.</dd>
   </dl>
-  <p>Store links go to that store&rsquo;s search page for the exact product name. Direct product URLs rotate during the sale; the search page shows the same product at the store, at the price we checked.</p>
+  <p>Store links go to that store&rsquo;s search page for the exact product name. Direct product URLs rotate during the sale; the search page shows the same product at the store, and the price we read at check time is the one on the card.</p>
 </section>`;
 }
 

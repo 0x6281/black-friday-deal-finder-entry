@@ -94,7 +94,7 @@ export function listPage(shown, state, counts) {
   const s = counts.stats;
   return `<section class="intro">
   <h1>Black Friday 2026 deals, checked today</h1>
-  <p class="lede">Every price below was read from the named deals source during Black Friday week (25–28 November 2026) and re-verified on Saturday 28 November 2026, at 09:00 UTC. This update adds 14 new deals — including a new Phones category — and corrects seven prices that moved since Friday. No inflated "was" prices, no guesswork: each card shows the sale price, the usual price, the discount, the verdict — and the evidence behind it. Every store link goes to the product page at that store.</p>
+  <p class="lede">Every price read from a named source 25–28 Nov, re-verified 28 Nov 09:00 UTC.</p>
   <div class="stats">
     <div class="stat"><span class="stat-num">${s.total}</span><span class="stat-label">verified deals</span></div>
     <div class="stat"><span class="stat-num">${s.newLows}</span><span class="stat-label">new lows</span></div>

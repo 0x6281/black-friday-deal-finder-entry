@@ -12,6 +12,13 @@ const checkTime = (iso) => {
   return `${d.getUTCDate()} ${months[d.getUTCMonth()]} ${d.getUTCFullYear()}, ${pad(d.getUTCHours())}:${pad(d.getUTCMinutes())} UTC`;
 };
 const verdictClass = (v) => `verdict verdict-${v.toLowerCase().replace(/\s+/g, '-')}`;
+// Sale-end dates are stored as YYYY-MM-DD; render them as "30 Nov 2026".
+// Splitting the string avoids any timezone shift a Date parse would add.
+const saleEndText = (iso) => {
+  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const [y, m, day] = iso.split('-').map(Number);
+  return `${day} ${months[m - 1]} ${y}`;
+};
 
 function storeChip(store) {
   return `<span class="store store-${store.toLowerCase().replace(/\s+/g, '-')}">${escape(store)}</span>`;
@@ -19,10 +26,13 @@ function storeChip(store) {
 
 function dealCard(d) {
   const pct = percentOff(d);
+  const badge = d.isNew ? `<span class="badge-new">New in this update</span>` : '';
+  const ends = d.saleEnds ? `<p class="card-ends">Sale ends ${saleEndText(d.saleEnds)}</p>` : '';
   return `<article class="card">
   <div class="card-top">
     <span class="pct">-${pct}%</span>
     <span class="${verdictClass(d.verdict)}">${escape(d.verdict)}</span>
+    ${badge}
   </div>
   <h3><a href="#/deal/${encodeURIComponent(d.id)}">${escape(d.title)}</a></h3>
   <p class="card-meta">${storeChip(d.store)} <span class="category">${escape(d.category)}</span></p>
@@ -30,6 +40,7 @@ function dealCard(d) {
   <p class="card-save">You save ${usd(saving(d))}</p>
   <p class="card-note">${escape(d.note)}</p>
   <p class="card-check">Checked ${checkTime(d.checked)} &middot; Source: ${escape(d.source)}</p>
+  ${ends}
   <p class="card-link"><a class="btn" href="${escape(d.url)}" target="_blank" rel="noopener">View at ${escape(d.store)} &nearr;</a></p>
 </article>`;
 }
@@ -83,12 +94,12 @@ export function listPage(shown, state, counts) {
   const s = counts.stats;
   return `<section class="intro">
   <h1>Black Friday 2026 deals, checked today</h1>
-  <p class="lede">Every price below was read from the named deals source during Black Friday week (25–27 November 2026) and re-verified on Friday 27 November 2026, at 15:00 UTC. No inflated "was" prices, no guesswork: each card shows the sale price, the usual price, the discount, the verdict — and the evidence behind it. Every store link goes to the product page at that store.</p>
+  <p class="lede">Every price below was read from the named deals source during Black Friday week (25–28 November 2026) and re-verified on Saturday 28 November 2026, at 09:00 UTC. This update adds 14 new deals — including a new Phones category — and corrects seven prices that moved since Friday. No inflated "was" prices, no guesswork: each card shows the sale price, the usual price, the discount, the verdict — and the evidence behind it. Every store link goes to the product page at that store.</p>
   <div class="stats">
     <div class="stat"><span class="stat-num">${s.total}</span><span class="stat-label">verified deals</span></div>
     <div class="stat"><span class="stat-num">${s.newLows}</span><span class="stat-label">new lows</span></div>
     <div class="stat"><span class="stat-num">${s.stores}</span><span class="stat-label">stores</span></div>
-    <div class="stat"><span class="stat-num">${escape(s.checkedShort)}</span><span class="stat-label">prices checked 27 Nov</span></div>
+    <div class="stat"><span class="stat-num">${escape(s.checkedShort)}</span><span class="stat-label">prices checked 28 Nov</span></div>
   </div>
 </section>
 <details class="filters-wrap">
@@ -99,7 +110,7 @@ export function listPage(shown, state, counts) {
 ${cards}
 <section class="verify" id="how-we-verify">
   <h2>How we verify</h2>
-  <p>Every deal on this page was read from a named deals source during Black Friday week (25–27 November 2026) and re-verified on 27 November 2026 at 15:00 UTC. The source is printed on each card and on each deal page, along with the evidence for its verdict. Prices are in US dollars and the discount is computed from the sale price against the usual price — the store's own list price, never the manufacturer's suggested price.</p>
+  <p>Every deal on this page was read from a named deals source during Black Friday week (25–28 November 2026) and re-verified on 28 November 2026 at 09:00 UTC. The source is printed on each card and on each deal page, along with the evidence for its verdict. Prices are in US dollars and the discount is computed from the sale price against the usual price — the store's own list price, never the manufacturer's suggested price. Where a store states when its sale ends, the date is shown on the card and the deal page; individual deals can sell out earlier.</p>
   <dl class="verdicts">
     <dt><span class="verdict verdict-new-low">NEW LOW</span></dt>
     <dd>The lowest price ever, or the lowest in 90 days, according to a price tracker or the source that reported it.</dd>
@@ -116,6 +127,8 @@ ${cards}
 
 export function dealPage(d, related) {
   const pct = percentOff(d);
+  const badge = d.isNew ? `<span class="badge-new">New in this update</span>` : '';
+  const endsRow = d.saleEnds ? `<dt>Sale ends</dt><dd>${saleEndText(d.saleEnds)}</dd>` : '';
   const rel = related.length === 0 ? '' : `<section class="related">
   <h2>More ${escape(d.category)} deals</h2>
   <div class="grid">${related.map(dealCard).join('')}</div>
@@ -125,6 +138,7 @@ export function dealPage(d, related) {
   <div class="card-top">
     <span class="pct pct-big">-${pct}%</span>
     <span class="${verdictClass(d.verdict)}">${escape(d.verdict)}</span>
+    ${badge}
   </div>
   <h1>${escape(d.title)}</h1>
   <p class="detail-meta">${storeChip(d.store)} <span class="category">${escape(d.category)}</span></p>
@@ -137,6 +151,7 @@ export function dealPage(d, related) {
     <dt>Verdict</dt><dd>${escape(d.verdict)}: ${d.verdict === 'NEW LOW' ? 'the lowest price ever, or the lowest in 90 days, per a tracker or the source.' : d.verdict === 'STRONG' ? 'a large, genuine cut on a current product.' : d.verdict === 'GOOD' ? 'a solid cut, or a first-ever discount on a product that rarely goes on sale.' : 'a small cut; only worth it if you already wanted the item.'}</dd>
     <dt>Evidence</dt><dd>${escape(d.note)}</dd>
     <dt>Checked</dt><dd>${checkTime(d.checked)}</dd>
+    ${endsRow}
     <dt>Source</dt><dd>${escape(d.source)}</dd>
   </dl>
   <p><a class="btn btn-big" href="${escape(d.url)}" target="_blank" rel="noopener">View at ${escape(d.store)} &nearr;</a></p>
@@ -147,5 +162,5 @@ ${rel}`;
 
 export function missingPage() {
   return `<h1>Deal not found</h1>
-<p>There is no deal at this address. <a href="#/">See all 43 verified deals</a>.</p>`;
+<p>There is no deal at this address. <a href="#/">See all 57 verified deals</a>.</p>`;
 }

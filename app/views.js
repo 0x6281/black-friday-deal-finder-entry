@@ -39,7 +39,7 @@ function dealCard(d) {
   <p class="card-price"><strong>${usd(d.price)}</strong> <s>${usd(d.was)}</s></p>
   <p class="card-save">You save ${usd(saving(d))}</p>
   <p class="card-note">${escape(d.note)}</p>
-  <p class="card-check">Checked ${checkTime(d.checked)} &middot; Source: ${escape(d.source)}</p>
+  <p class="card-check">Batch re-verified ${checkTime(d.checked)} &middot; Source: ${escape(d.source)}</p>
   ${ends}
   <p class="card-link"><a class="btn" href="${escape(d.url)}" target="_blank" rel="noopener">View at ${escape(d.store)} &nearr;</a></p>
 </article>`;
@@ -150,7 +150,7 @@ export function dealPage(d, related) {
     <dt>Discount</dt><dd>${pct}% off &mdash; save ${usd(saving(d))}</dd>
     <dt>Verdict</dt><dd>${escape(d.verdict)}: ${d.verdict === 'NEW LOW' ? 'the lowest price ever, or the lowest in 90 days, per a tracker or the source.' : d.verdict === 'STRONG' ? 'a large, genuine cut on a current product.' : d.verdict === 'GOOD' ? 'a solid cut, or a first-ever discount on a product that rarely goes on sale.' : 'a small cut; only worth it if you already wanted the item.'}</dd>
     <dt>Evidence</dt><dd>${escape(d.note)}</dd>
-    <dt>Checked</dt><dd>${checkTime(d.checked)}</dd>
+    <dt>Batch re-verified</dt><dd>${checkTime(d.checked)}</dd>
     ${endsRow}
     <dt>Source</dt><dd>${escape(d.source)}</dd>
   </dl>
